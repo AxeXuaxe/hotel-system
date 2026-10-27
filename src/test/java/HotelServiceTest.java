@@ -82,4 +82,21 @@ public class HotelServiceTest {
                 LocalDate.of(2026, 9, 18)
         ));
     }
+    @Test
+    void test4_savedBookingCanBeFound() {
+        Booking booking = hotelService.createBooking(
+                null,
+                guest1,
+                room,
+                LocalDate.of(2026, 10, 1),
+                LocalDate.of(2026, 10, 5)
+        );
+
+        Booking found = hotelService.getBooking(booking.getId());
+
+        assertEquals(booking.getId(), found.getId());
+        assertEquals(room.getNumber(), found.getRoom().getNumber());
+        assertEquals(LocalDate.of(2026, 10, 1), found.getCheckIn());
+        assertEquals(LocalDate.of(2026, 10, 5), found.getCheckOut());
+    }
 }
