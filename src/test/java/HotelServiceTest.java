@@ -44,7 +44,7 @@ public class HotelServiceTest {
         assertEquals(room.getId(), booking.getRoom().getId());
     }
 
-    // Тест 2 — ошибочный сценарий: не может взять это же повторно
+    // Тест 2 — ошибочный сценарий: неаа может взять это же повторно
     @Test
     void test2_cannotBookSameDatesAgain() {
         hotelService.createBooking(
