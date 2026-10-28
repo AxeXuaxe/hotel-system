@@ -96,7 +96,7 @@ public class HotelServiceTest {
 
         assertEquals(booking.getId(), found.getId());
         assertEquals(room.getNumber(), found.getRoom().getNumber());
-        //assertEquals("999", found.getRoom().getNumber());
+        assertEquals("999", found.getRoom().getNumber());
         assertEquals(LocalDate.of(2026, 10, 1), found.getCheckIn());
         assertEquals(LocalDate.of(2026, 10, 5), found.getCheckOut());
     }
