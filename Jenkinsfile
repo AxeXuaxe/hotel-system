@@ -6,21 +6,33 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
-                bat 'mvn compile'
+                bat 'mvn -B compile'
+            }
+        }
+
+        stage('Static Analysis') {
+            steps {
+                bat 'mvn -B checkstyle:check'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'mvn test'
+                bat 'mvn -B test'
             }
         }
 
         stage('Package') {
             steps {
-                bat 'mvn package -DskipTests'
+                bat 'mvn -B package -DskipTests'
             }
         }
 

@@ -8,7 +8,9 @@ import service.HotelService;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class HotelServiceTest {
 
@@ -99,5 +101,21 @@ public class HotelServiceTest {
         //assertEquals("999", found.getRoom().getNumber());
         assertEquals(LocalDate.of(2026, 10, 1), found.getCheckIn());
         assertEquals(LocalDate.of(2026, 10, 5), found.getCheckOut());
+    }
+
+    @Test
+    void test5_invalidDatesFail() {
+        assertThrows(IllegalArgumentException.class, () -> hotelService.createBooking(
+                null,
+                guest1,
+                room,
+                LocalDate.of(2026, 9, 15),
+                LocalDate.of(2026, 9, 10)
+        ));
+    }
+
+    @Test
+    void test6_missingBookingFails() {
+        assertThrows(IllegalArgumentException.class, () -> hotelService.getBooking(999L));
     }
 }

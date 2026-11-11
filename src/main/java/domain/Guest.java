@@ -7,7 +7,7 @@ public class Guest {
 
     public Guest() {}
 
-    public Guest(Long id, String fullName, String phone){
+    public Guest(Long id, String fullName, String phone) {
         this.id = id;
         this.fullName = fullName;
         this.phone = phone;

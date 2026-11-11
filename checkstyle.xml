@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<!--
+    Правила статического анализа для ЛР №5.
+    Проверка запускается командой: mvn checkstyle:check
+-->
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+
+    <!-- Строка не длиннее 120 символов: длинные строки труднее читать. -->
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="ignorePattern" value="^package .*|^import .*"/>
+    </module>
+
+    <!-- В отступах запрещены символы табуляции, используются только пробелы. -->
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <!-- Перед '{' обязателен пробел: if (ok) { а не if (ok){ -->
+    <module name="RegexpSingleline">
+        <property name="format" value="\)\{"/>
+        <property name="message" value="Перед открывающей фигурной скобкой нужен пробел"/>
+    </module>
+
+    <module name="TreeWalker">
+        <!-- Запрет import java.util.*; — импорты должны быть явными. -->
+        <module name="AvoidStarImport"/>
+
+        <!-- Неиспользуемые импорты нужно удалять. -->
+        <module name="UnusedImports"/>
+
+        <!-- У if / for / while / do всегда должны быть фигурные скобки. -->
+        <module name="NeedBraces"/>
+
+        <!-- Закрывающая скобка оформляется единообразно. -->
+        <module name="RightCurly"/>
+
+        <!-- Пробелы вокруг операторов. Пустые конструкторы вида Booking() {} допустимы. -->
+        <module name="WhitespaceAround">
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+            <property name="allowEmptyLambdas" value="true"/>
+        </module>
+
+        <!-- Одна инструкция на строку. -->
+        <module name="OneStatementPerLine"/>
+
+        <!-- Нельзя объявлять несколько переменных в одной строке. -->
+        <module name="MultipleVariableDeclarations"/>
+
+        <!-- Порядок модификаторов: public static final, а не final public static. -->
+        <module name="ModifierOrder"/>
+
+        <!-- Имена пакетов: только строчные буквы, например domain, service. -->
+        <module name="PackageName"/>
+
+        <!-- Имена классов и интерфейсов: HotelService, BookingRepository. -->
+        <module name="TypeName"/>
+
+        <!-- Имена методов: camelCase, в тестах допускается символ '_'. -->
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
+        </module>
+
+        <!-- Имена параметров методов. -->
+        <module name="ParameterName"/>
+
+        <!-- Имена локальных переменных. -->
+        <module name="LocalVariableName"/>
+
+        <!-- Имена полей класса. -->
+        <module name="MemberName"/>
+
+        <!-- Константы: UPPER_SNAKE_CASE. Поле логгера по соглашению SLF4J называется log. -->
+        <module name="ConstantName">
+            <property name="format" value="^log$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"/>
+        </module>
+
+        <!-- Если класс переопределяет equals, он должен переопределять hashCode. -->
+        <module name="EqualsHashCode"/>
+
+        <!-- Пустые блоки if/for/while/try запрещены. -->
+        <module name="EmptyBlock"/>
+
+        <!-- Упрощать выражения вида if (flag == true). -->
+        <module name="SimplifyBooleanExpression"/>
+    </module>
+</module>
