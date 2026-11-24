@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Отель — мониторинг бронирований</title>
+    <style>
+        :root {
+            --ink: #1c2430;
+            --muted: #5c6b7a;
+            --line: #e4ddd2;
+            --paper: #f6f3ee;
+            --card: #fffdf9;
+            --green: #1f6b4a;
+            --green-dark: #164d36;
+            --red: #9b2c2c;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, #efe4d2, transparent 32%),
+                var(--paper);
+        }
+        main { max-width: 980px; margin: 0 auto; padding: 32px 20px 48px; }
+        h1 { margin: 0 0 6px; font-size: 32px; letter-spacing: -0.03em; }
+        h2 { margin: 0 0 12px; font-size: 18px; }
+        p { line-height: 1.45; }
+        .lead { margin: 0; color: var(--muted); }
+        .cards, .actions, .split { display: grid; gap: 12px; }
+        .cards { grid-template-columns: repeat(3, 1fr); margin: 22px 0; }
+        .card, .panel {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(40, 30, 10, 0.04);
+        }
+        .card { padding: 14px 16px; }
+        .card span, label { display: block; color: var(--muted); font-size: 13px; }
+        .card strong { display: block; margin-top: 4px; font-size: 28px; }
+        .panel { padding: 18px; margin-top: 14px; }
+        .actions { grid-template-columns: repeat(2, 1fr); }
+        .split { grid-template-columns: 1.3fr 0.7fr; }
+        button, .link-btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 10px 14px;
+            background: var(--green);
+            color: white;
+            font: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, .link-btn:hover { background: var(--green-dark); }
+        button.danger, .link-btn.danger { background: var(--red); }
+        .banner { margin: 0 0 14px; padding: 12px 14px; border-radius: 12px; }
+        .banner.ok { background: #e5f6ee; color: #146c43; }
+        .banner.error { background: #fde8e8; color: #9b1c1c; }
+        .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        input, select {
+            width: 100%;
+            margin-top: 4px;
+            padding: 9px 10px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            font: inherit;
+            background: white;
+        }
+        .wide { grid-column: 1 / -1; }
+        .hint { color: var(--muted); font-size: 14px; }
+        footer { margin-top: 18px; color: var(--muted); font-size: 14px; }
+        a { color: var(--green-dark); }
+        @media (max-width: 800px) {
+            .cards, .actions, .split, .fields { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Система бронирования отеля</h1>
+    <p class="lead">Операции меняют метрики. Prometheus забирает их со страницы /metrics, Grafana рисует dashboard.</p>
+    __MESSAGE_BLOCK__
+    <section class="cards">
+        <article class="card"><span>application_operations_total</span><strong>__OPERATIONS__</strong></article>
+        <article class="card"><span>application_operations_success_total</span><strong>__SUCCESS__</strong></article>
+        <article class="card"><span>application_operations_error_total</span><strong>__ERRORS__</strong></article>
+        <article class="card"><span>hotel_bookings_total</span><strong>__BOOKINGS__</strong></article>
+        <article class="card"><span>hotel_booking_occupied_total</span><strong>__OCCUPIED__</strong></article>
+        <article class="card"><span>hotel_booking_errors_total</span><strong>__BOOKING_ERRORS__</strong></article>
+    </section>
+
+    <section class="panel">
+        <h2>Сценарии для эксперимента</h2>
+        <p class="hint">Номер 101 уже занят с 1 по 10 ноября 2026. Три успешные кнопки бронируют свободные номера. Повтор той же кнопки тоже даст «номер занят».</p>
+        <div class="actions">
+            <form method="post" action="/bookings">
+                <input type="hidden" name="guestName" value="Ivan Ivanov">
+                <input type="hidden" name="phone" value="+79990001122">
+                <input type="hidden" name="roomNumber" value="102">
+                <input type="hidden" name="checkIn" value="2026-12-01">
+                <input type="hidden" name="checkOut" value="2026-12-05">
+                <button type="submit">Успех: номер 102, 1–5 декабря</button>
+            </form>
+            <form method="post" action="/bookings">
+                <input type="hidden" name="guestName" value="Petr Petrov">
+                <input type="hidden" name="phone" value="+79995552211">
+                <input type="hidden" name="roomNumber" value="103">
+                <input type="hidden" name="checkIn" value="2026-12-01">
+                <input type="hidden" name="checkOut" value="2026-12-05">
+                <button type="submit">Успех: номер 103, 1–5 декабря</button>
+            </form>
+            <form method="post" action="/bookings">
+                <input type="hidden" name="guestName" value="Maria Sokolova">
+                <input type="hidden" name="phone" value="+79997776655">
+                <input type="hidden" name="roomNumber" value="104">
+                <input type="hidden" name="checkIn" value="2026-12-10">
+                <input type="hidden" name="checkOut" value="2026-12-14">
+                <button type="submit">Успех: номер 104, 10–14 декабря</button>
+            </form>
+            <form method="post" action="/bookings">
+                <input type="hidden" name="guestName" value="Olga Smirnova">
+                <input type="hidden" name="phone" value="+79991112233">
+                <input type="hidden" name="roomNumber" value="101">
+                <input type="hidden" name="checkIn" value="2026-11-03">
+                <input type="hidden" name="checkOut" value="2026-11-08">
+                <button class="danger" type="submit">Ошибка: номер 101 уже занят</button>
+            </form>
+            <form method="post" action="/bookings">
+                <input type="hidden" name="guestName" value="Ivan Ivanov">
+                <input type="hidden" name="phone" value="+79990001122">
+                <input type="hidden" name="roomNumber" value="102">
+                <input type="hidden" name="checkIn" value="2026-12-10">
+                <input type="hidden" name="checkOut" value="2026-12-01">
+                <button class="danger" type="submit">Ошибка: дата выезда раньше заезда</button>
+            </form>
+            <a class="link-btn danger" href="/bookings?id=999">Ошибка: бронирование 999 не найдено</a>
+        </div>
+    </section>
+
+    <div class="split">
+        <section class="panel">
+            <h2>Своё бронирование</h2>
+            <form method="post" action="/bookings">
+                <div class="fields">
+                    <label>Гость<input name="guestName" value="Sergey Orlov" required></label>
+                    <label>Телефон<input name="phone" value="+79991234567" required></label>
+                    <label>Номер
+                        <select name="roomNumber">
+                            <option>101</option>
+                            <option selected>102</option>
+                            <option>103</option>
+                            <option>104</option>
+                        </select>
+                    </label>
+                    <label>Заезд<input type="date" name="checkIn" value="2026-12-20" required></label>
+                    <label>Выезд<input type="date" name="checkOut" value="2026-12-25" required></label>
+                    <div class="wide"><button type="submit">Забронировать</button></div>
+                </div>
+            </form>
+        </section>
+        <section class="panel">
+            <h2>Найти бронирование</h2>
+            <form method="get" action="/bookings">
+                <label>Идентификатор<input name="id" value="1" required></label>
+                <p><button type="submit">Открыть</button></p>
+            </form>
+            <p class="hint">Успешный поиск увеличивает operations и success. Несуществующий id увеличивает errors.</p>
+        </section>
+    </div>
+    <footer>
+        <p>Logging пишет текст события в консоль и logs/hotel.log. Monitoring считает те же события числами.</p>
+        <p>
+            <a href="/metrics">/metrics</a>
+            · Prometheus <a href="http://localhost:9090">localhost:9090</a>
+            · Grafana <a href="http://localhost:3000">localhost:3000</a> (admin / admin)
+        </p>
+    </footer>
+</main>
+</body>
+</html>

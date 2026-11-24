@@ -13,6 +13,7 @@
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <slf4j.version>2.0.16</slf4j.version>
         <logback.version>1.5.16</logback.version>
+        <micrometer.version>1.13.8</micrometer.version>
     </properties>
 
     <dependencies>
@@ -25,6 +26,25 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
+        </dependency>
+
+        <!--
+            Micrometer — API метрик. Бизнес-код увеличивает счётчики и таймер,
+            не зная текстового формата Prometheus.
+        -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+            <version>${micrometer.version}</version>
+        </dependency>
+        <!--
+            Prometheus Registry — переводит реестр Micrometer в формат,
+            который Prometheus забирает со страницы /metrics (scrape).
+        -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${micrometer.version}</version>
         </dependency>
 
         <!-- JUnit 5 -->
